@@ -1,12 +1,12 @@
 package random
 
 import (
-	"Gourotines2/calculateMinMax"
+	"Gourotines2/minmax"
 	"fmt"
 	"math/rand"
 )
 
-func CreateRandom(n int, ch chan<- []int, minMaxNumbers *calculateMinMax.MinMax) {
+func CreateRandom(n int, ch chan<- []int, minMaxNumbers *minmax.MinMax) {
 	fmt.Println("✅ Виконується горутина 1 createRandom, починаю створювати числа")
 	numbers := make([]int, n)
 

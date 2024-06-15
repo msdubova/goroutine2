@@ -1,4 +1,4 @@
-package calculateMinMax
+package minmax
 
 import "fmt"
 
