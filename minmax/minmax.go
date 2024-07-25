@@ -7,25 +7,25 @@ type MinMax struct {
 	Max int
 }
 
-func CalculateMinMax(numbers []int, ch chan<- MinMax) {
+func CalculateMinMax(chRandInt <-chan int, chMinMax chan<- MinMax) {
 	fmt.Println("✅ Виконується горутина 2 calculateMinMax")
 
-	var min int = numbers[0]
-	var max int = numbers[0]
-
-	for _, item := range numbers {
-		if item < min {
-			min = item
-		}
-		if item > max {
-			max = item
+	var min, max int
+	first := true
+	for num := range chRandInt {
+		if first {
+			min, max = num, num
+			first = false
+		} else {
+			if num < min {
+				min = num
+			}
+			if num > max {
+				max = num
+			}
 		}
 	}
-
-	fmt.Println("Min число ", min)
-	fmt.Println("Max число ", max)
-	result := MinMax{Min: min, Max: max}
-	ch <- result
-
-	fmt.Println("Min Max  числа передано в канал", result)
+	chMinMax <- MinMax{Min: min, Max: max}
+	close(chMinMax)
+	fmt.Println("Min Max  числа передано в канал")
 }

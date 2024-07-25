@@ -4,19 +4,26 @@ import (
 	"Gourotines2/minmax"
 	"fmt"
 	"math/rand"
+	"time"
 )
 
-func CreateRandom(n int, ch chan<- []int, minMaxNumbers *minmax.MinMax) {
+func CreateRandom(n int, chRandInt chan<- int, chMinMax <-chan minmax.MinMax) {
 	fmt.Println("✅ Виконується горутина 1 createRandom, починаю створювати числа")
+	rand.Seed(time.Now().UnixNano())
 	numbers := make([]int, n)
 
-	for i := range numbers {
-		numbers[i] = rand.Intn(100)
+	for i := 0; i < n; i++ {
+		num := rand.Intn(100)
+		numbers[i] = num
+		chRandInt <- num
 	}
 
 	fmt.Println("Створено рандомні числа", numbers)
-	ch <- numbers
 	fmt.Println("Рандомні числа передано в канал")
+	close(chRandInt)
 
-	fmt.Println("Перша горутина друкує результат другої  - Min Max", *minMaxNumbers)
+	minMaxNumbers := <-chMinMax
+
+	fmt.Println("Перша горутина друкує результат другої  - Min Max", minMaxNumbers.Min, minMaxNumbers.Max)
+
 }
